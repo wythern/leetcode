@@ -2,7 +2,26 @@
 
 class Node{
 public:
+	Node() : strPattern("")
+		   , bSelfLoop(false)
+	{}
+
+	~Node()
+	{
+		strPattern.clear();
+#if 0
+		for(std::set<Node*>::iterator it = vConnectNodes.begin();
+			it != vConnectNodes.end();
+			++it)
+			delete *it;
+
+		vConnectNodes.clear();
+#endif
+	}
+
+public:
 	std::string strPattern;
+	bool bSelfLoop;
 	std::set<Node*> vConnectNodes;
 };
 
@@ -42,29 +61,27 @@ private:
 		nodeGraph.strPattern.assign("START");
 		while(p[i] != '\0'){
 			if(p[i] != '*'){
-				Node* pNode = new Node;
-				pNode->strPattern.assign(p, i, 1);
-				pCurrNode->vConnectNodes.insert(pNode);
-				for(std::set<Node*>::iterator it = vPrevNode.begin();
-					it != vPrevNode.end();
-					++it){
-					(*it)->vConnectNodes.insert(pNode);
-				}
+				if(pCurrNode->strPattern.compare(std::string(p, i, 1)) || (p[i+1] != '*') || !pCurrNode->bSelfLoop){
+					Node* pNode = new Node;
+					pNode->strPattern.assign(p, i, 1);
+					pCurrNode->vConnectNodes.insert(pNode);
+					for(std::set<Node*>::iterator it = vPrevNode.begin();
+						it != vPrevNode.end();
+						++it){
+						(*it)->vConnectNodes.insert(pNode);
+					}
 
-				if(p[i+1] != '*'){
-					vPrevNode.clear();
-				}else{
-					vPrevNode.insert(pCurrNode);
+					if(p[i+1] != '*'){
+						vPrevNode.clear();
+					}else{
+						vPrevNode.insert(pCurrNode);
+					}
+					pCurrNode = pNode;
 				}
-				pCurrNode = pNode;
 			}else{
 				// handle '*' case.
 				pCurrNode->vConnectNodes.insert(pCurrNode); // add a link to itself.
-				for(std::set<Node*>::iterator it = vPrevNode.begin();
-					it != vPrevNode.end();
-					++it){
-					(*it)->vConnectNodes.insert(pCurrNode);
-				}
+				pCurrNode->bSelfLoop = true;
 				vPrevNode.insert(pCurrNode);
 			}
 			i++;

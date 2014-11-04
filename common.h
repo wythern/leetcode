@@ -64,5 +64,7 @@ void printArray(int A[], int n, const char* pszArrayName = NULL)
 	printf("]\n");
 }
 
+using std::string;
+using std::vector;
 
 #endif

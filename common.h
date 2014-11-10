@@ -65,6 +65,24 @@ void printArray(int A[], int n, const char* pszArrayName = NULL)
 	printf("]\n");
 }
 
+void* mallocNdIntArray(const int d, const int sizes[]){
+    void* p = NULL;
+    if(0 >= d)
+        return p;
+
+    if(1 == d)
+        p = (void*)malloc(sizes[0]*sizeof(int));//sizeof(type)?
+    else{
+        int** array = (int**)malloc(sizes[0]*sizeof(int*));
+        for(int i = 0; i < sizes[0]; ++i) {
+            array[i] = (int*)mallocNdIntArray(d-1, sizes+1);
+        }
+        p = (void*)array;
+    }
+
+    return p;
+}
+
 using std::string;
 using std::vector;
 

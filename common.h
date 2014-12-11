@@ -18,6 +18,7 @@
 #include <climits>
 #include <vector>
 #include <set>
+#include <stack>
 #include <map>
 #include <hash_map>
 #include <algorithm>
@@ -29,17 +30,12 @@
 #include <ext/hash_map>
 using __gnu_cxx::hash_map;
 
-typedef struct node* nodeptr;
-typedef struct node{
-	void* pContent;
-	nodeptr next;
-} NODE;
-
 struct ListNode {
     int val;
     ListNode *next;
 
     ListNode(int x) : val(x), next(NULL) {}
+	ListNode(int A[], int m){from(A, m);}
     ListNode() : val(0), next(NULL) {}
 
 public:

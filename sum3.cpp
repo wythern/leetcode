@@ -264,13 +264,14 @@ public:
 		typedef struct node{
 			T1 t1;
 			T2 t2;
-			nodeptr next;
-		} NODE;
+			//nodeptr next; // using vector<node>, so this ptr is useless.
+		} NODE, *NODEPTR;
 		
 	public:
-		my_hash_map()
+		my_hash_map() : MULT(31)
+					  , NHASH(29989)
+					  , m_vTable(NHASH, vector<NODE>())
 		{
-			m_vTable.setCapacity(NHASH);
 		}
 
 		~my_hash_map()
@@ -284,23 +285,28 @@ public:
 		}
 
 		T2& operator [] (T1 t1){
-			vector<node> vNode = m_vTable[hash(t1)];
+			vector<node>& vNode = m_vTable[hash(t1)];
 			typename vector<node>::iterator it = vNode.begin();
 			for(; it != vNode.end(); ++it){
 				if(it->t1 == t1){
 					return it->t2;
 				}
 			}
+
+			NODEPTR pNode = new node;
+			pNode->t1 = t1;
+			vNode.push_back(*pNode);
+			return pNode->t2;
 		}
 
 	private:
 		uint32_t hash(T1 t1){
-			return t1 % NHASH;
+			return abs(t1) % NHASH;
 		}
 
 	private:
-		const int MULT = 31;
-		const int NHASH = 29989;
+		const int MULT;// = 31;
+		const int NHASH;// = 29989;
 		vector<vector<NODE> > m_vTable;
 	};
 
@@ -324,8 +330,9 @@ public:
 			{
 				double ts = currentTimingMs();
 				if(setCandidate.find(candidate) != -1){
-					set<pair<int, int> >::iterator it = setCandidate[candidate].begin();
-					while(it != setCandidate[candidate].end()){
+					set<pair<int, int> >& matchSet = setCandidate[candidate];
+					set<pair<int, int> >::iterator it = matchSet.begin();
+					while(it != matchSet.end()){
 						vector<int> vSolution;
 						vSolution.push_back(num[i]);
 						vSolution.push_back((*it).first);
@@ -363,10 +370,10 @@ int main(int argc, char** argv)
 	int B[] = {-7,-11,12,-15,14,4,4,11,-11,2,-8,5,8,14,0,3,2,3,-3,-15,-2,3,6,1,2,8,-5,-7,3,1,8,11,-3,6,3,-4,-13,-15,14,-8,2,-8,4,-13,13,11,5,0,0,9,-8,5,-2,14,-9,-15,-1,-6,-15,9,10,9,-2,-8,-8,-14,-5,-14,-14,-6,-15,-5,-7,5,-11,14,-7,2,-9,0,-4,-1,-9,9,-10,-11,1,-4,-2,2,-9,-15,-12,-4,-8,-5,-11,-6,-4,-9,-4,-3,-7,4,9,-2,-5,-13,7,2,-5,-12,-14,1,13,-9,-3,-9,2,3,8,0,3};
     vector<int> vInput(B, B + sizeof(B)/sizeof(int));
 
-#if 1
+#if 0
 	std::vector<int> vTest = generateRandomIntVector(3000, -3000, 3000);
-    vector<vector<int> > v = s.threeSum7(vTest);
-	/*
+    vector<vector<int> > v = s.threeSum7(vInput);
+	///*
     for(int i = 0; i < v.size(); ++i){
         vector<int>::iterator it = v[i].begin();
         while(it != v[i].end()){
@@ -374,7 +381,7 @@ int main(int argc, char** argv)
         }
         std::cout << std::endl;
     }
-	*/
+	//*/
 #else
 	vector<vector<vector<int> > > vTestResults;
 

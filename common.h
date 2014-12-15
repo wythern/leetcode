@@ -143,5 +143,5 @@ double currentTimingMs()
     return currentTiming()/1000;
 }
 
-
 #endif
+

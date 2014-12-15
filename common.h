@@ -29,6 +29,13 @@
 //EXT.
 #include <ext/hash_map>
 using __gnu_cxx::hash_map;
+using std::string;
+using std::vector;
+using std::set;
+using std::map;
+using std::pair;
+using std::cout;
+using std::endl;
 
 struct ListNode {
     int val;
@@ -75,6 +82,14 @@ void printArray(int A[], int n, const char* pszArrayName = NULL)
     for(int i = 0; i < n; ++i)
         printf("%d,", A[i]);
     printf("]\n");
+}
+
+void printArray(vector<string>& vStr){
+	for(vector<string>::iterator it = vStr.begin();
+		it != vStr.end();
+		++it){
+		cout << *it << endl;
+	}
 }
 
 std::vector<int> generateRandomIntVector(int size,
@@ -128,11 +143,5 @@ double currentTimingMs()
     return currentTiming()/1000;
 }
 
-
-using std::string;
-using std::vector;
-using std::set;
-using std::map;
-using std::pair;
 
 #endif

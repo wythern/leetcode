@@ -43,11 +43,15 @@ struct ListNode {
 
     ListNode(int x) : val(x), next(NULL) {}
 	ListNode(int A[], int m){from(A, m);}
+	ListNode(vector<int> vA) {from(&vA[0], vA.size());}
     ListNode() : val(0), next(NULL) {}
 
 public:
     void from(int A[], int m){
-        int i = 0;
+		val = INT_MIN;
+		next = NULL;
+
+		int i = 0;
         ListNode* p = this;
         while(i < m){
             if(i != 0){
@@ -55,6 +59,7 @@ public:
                 p = p->next;
             }else{
                 val = A[i];
+				next = NULL;
             }
             i++;
         }
@@ -68,6 +73,21 @@ public:
         }
         std::cout << std::endl;
     }
+
+	const bool operator == (const ListNode& rhs) const{
+		bool ret = true;
+		const ListNode* plhs = this;
+		const ListNode* prhs = &rhs;
+		while(NULL != plhs &&
+			  NULL != prhs &&
+			  plhs->val == prhs->val){
+			plhs = plhs->next;
+			prhs = prhs->next;
+		}
+
+		return ((plhs == NULL) && (prhs == NULL));
+	}
+
 };
 
 void printArray(int A[], int n, const char* pszArrayName = NULL)
@@ -98,7 +118,15 @@ std::vector<int> generateRandomIntVector(int size,
     if(size < 0 )
         return std::vector<int>();
 
+#if 1
+	struct timeval tv;
+    gettimeofday(&tv,NULL);
+	uint32_t seed = tv.tv_sec + tv.tv_usec;
+#else
+	time_t stime;
     uint32_t seed = time(NULL);
+	printf("seed = %d.\n", seed);
+#endif
     srand(seed);
 
     double field = upper_bound - lower_bound;

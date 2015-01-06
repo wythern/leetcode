@@ -90,7 +90,8 @@ public:
 
 };
 
-void printArray(int A[], int n, const char* pszArrayName = NULL)
+template <class T>
+void printArray(T A[], int n, const char* pszArrayName = NULL)
 {
 
     if(NULL != pszArrayName){
@@ -100,7 +101,7 @@ void printArray(int A[], int n, const char* pszArrayName = NULL)
     }
 
     for(int i = 0; i < n; ++i)
-        printf("%d,", A[i]);
+		std::cout << A[i] << ",";
     printf("]\n");
 }
 

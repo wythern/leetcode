@@ -20,15 +20,15 @@
 #include <set>
 #include <stack>
 #include <map>
-#include <hash_map>
 #include <algorithm>
 #include <iostream>
 #include <string>
 #include <exception>
+//#include <hash_map>
 
 //EXT.
-#include <ext/hash_map>
-using __gnu_cxx::hash_map;
+//#include <ext/hash_map>
+//using __gnu_cxx::hash_map;
 using std::string;
 using std::vector;
 using std::set;
@@ -36,6 +36,8 @@ using std::map;
 using std::pair;
 using std::cout;
 using std::endl;
+using std::find;
+using std::swap;
 
 struct ListNode {
     int val;
@@ -102,6 +104,20 @@ void printArray(T A[], int n, const char* pszArrayName = NULL)
 
     for(int i = 0; i < n; ++i)
 		std::cout << A[i] << ",";
+    printf("]\n");
+}
+
+template <class T>
+void printContainer(T A, int n, const char* pszArrayName = NULL)
+{
+    if(NULL != pszArrayName){
+        printf("%s[", pszArrayName);
+    }else{
+        printf("Array[");
+    }
+
+    for(typename T::iterator i = A.begin(); i != A.end(); ++i)
+		std::cout << *i << ",";
     printf("]\n");
 }
 

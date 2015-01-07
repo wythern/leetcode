@@ -3,43 +3,65 @@
 class Solution {
 public:
     void nextPermutation(vector<int> &num) {
-		vector<vector<int> > vAllRange(allRange(num));
-		sort(vAllRange.begin(), vAllRange.end());
-		vector<vector<int> >::iterator it = std::upper_bound(vAllRange.begin(), vAllRange.end(), num);
-		
-		if(vAllRange.end() == it)
-			num = *vAllRange.begin();
-		else
-			num = *it;
+		if(num.empty())
+			return;
+
+		mNextPermuntation = num;
+		traversalAllRange(num);
+		swap(num, mNextPermuntation);
     }
 
-	vector<vector<int> > allRange(const vector<int> &num)
+	void traversalAllRange(vector<int> &num)
 	{
 		vector<int> vDigits(num);
-		vector<vector<int> > vAllRange;
-		allRangeImpl(vDigits, vDigits.begin(), vDigits.end(), vAllRange);
-		return vAllRange;
+		allRangeImpl(num, vDigits, vDigits.begin(), vDigits.end());
 	}
 
-	void allRangeImpl(vector<int>& vDigits,
+	void allRangeImpl(vector<int>& num,
+					  vector<int>& vDigits,
 					  vector<int>::iterator pos,
-					  vector<int>::iterator end,
-					  vector<vector<int> >& vAllRange)
+					  vector<int>::iterator end)
 	{
 		if(pos == end){
-			vAllRange.push_back(vDigits);
-			//printContainer<vector<int> >(vDigits, vDigits.size(), "AllRange");
+			printContainer(vDigits, vDigits.size(), "vDigits");
+			if(mNextPermuntation == num && mNextPermuntation < vDigits){
+				mNextPermuntation = vDigits;
+				printContainer(vDigits, vDigits.size(), "num");
+			}else if(num < vDigits && vDigits < mNextPermuntation){
+				mNextPermuntation = vDigits;
+				printContainer(vDigits, vDigits.size(), "num");
+			}
 			return;
 		}
 
-		allRangeImpl(vDigits, pos+1, end, vAllRange);
+		allRangeImpl(num, vDigits, pos+1, end);
 		for(vector<int>::iterator it = pos + 1; it != end; ++it){
 			swap(*it, *pos);
-			allRangeImpl(vDigits, it, end, vAllRange);
+			allRangeImpl(num, vDigits, it, end);
 			swap(*pos, *it);
 		}
 	}
+
+private:
+	vector<int> mNextPermuntation;
 };
+
+bool VectorLessThan(const vector<int>& a, const vector<int>& b)
+{
+	printf("a(%d), b(%d).\n", 0, 0);
+
+	if(a.size() != b.size()){
+		return (a.size() < b.size());
+	}
+
+	vector<int>::const_iterator itA = a.begin();
+	vector<int>::const_iterator itB = b.begin();
+	while(*itA != *itB && itA != a.end()){
+		++itA;++itB;
+	}
+
+	return (itA == a.end()) ? false : *itA < *itB;
+}
 
 int main(int argc, char** argv){
 	if(argc < 2){

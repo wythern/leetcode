@@ -8,7 +8,7 @@ public:
 
     vector<int> searchRange(int A[], int s, int e, int target) {
         if (NULL == A || s >= e)
-            return vector<int>(2, 0);
+            return vector<int>(2, -1);
 
         int m = s + (e-s)/2;
         if(A[m] < target){
@@ -17,44 +17,49 @@ public:
             return searchRange(A, s, m, target);
         }else{ // A[m] == target
             // left
-            int *B = A + s;
-            int c = m - s + 1;
-            int l = 0;
-            int i = 0;
-            while(c > 0){
-                i = l;
-                int step = c/2;
-                i += step;
-                if( B[i] < target){
-                    l = i+1;
-                    c -= step + 1;
-                }else
-                    c = step;
-            }
-            l += s;
-
-            // right
-            B = A + m + 1;
-            c = e - m;
-            i = 0;
-            int r = 0;
-            while(c > 0){
-                i = r;
-                int step = c/2;
-                if(B[i] <= target){
-                    r = i + 1;
-                    c -= step + 1;
-                }else{
-                    c = step;
-                }
-            }
-            r += m;
+			int l = lowerBound(A + s, m - s + 1, target) + s;
+			int r = upperBound(A + m, e - m, target) + m - 1;
             vector<int> vRange;
             vRange.push_back(l);
             vRange.push_back(r);
             return vRange;
         }
     }
+
+	int lowerBound(int A[], int n, int t){
+            int s = 0;
+			int c = n;
+			int i = 0;
+            while(c > 0){
+                int step = c/2;
+				i = s + step;
+                if(A[i] < t){
+                    s = i + 1;
+                    c -= step + 1;
+                }else{
+                    c = step;
+                }
+            }
+            return s;
+	}
+
+	int upperBound(int A[], int n, int t){
+            int s = 0;
+			int c = n;
+			int i = 0;
+            while(c > 0){
+                int step = c/2;
+				i = s + step;
+                if(A[i] <= t){
+                    s = i + 1;
+                    c -= step + 1;
+                }else{
+                    c = step;
+                }
+            }
+            return s;
+	}
+
 };
 
 int main(int argc, char** argv){

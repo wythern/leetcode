@@ -26,6 +26,7 @@ public:
         }
     }
 
+	// also could serve searchIndex() problem.
 	int lowerBound(int A[], int n, int t){
             int s = 0;
 			int c = n;

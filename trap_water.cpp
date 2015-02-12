@@ -2,6 +2,42 @@
 
 class Solution {
 public:
+	int trap0(int A[], int n) {
+        int i = 0;
+        int j = n - 1;
+        int w = 0;
+        int m = 0;
+        while(i < j){
+            if(A[i] <= A[j]){
+                int k = i + 1;
+                while(k < j){
+                    w += ((A[k] - A[i]) < 0) ? (A[i] - A[k]) : 0;
+                    A[k] = ((A[k] - A[i]) < 0) ? A[i] : A[k];
+                    ++k;
+                }
+                cout << "[ " << i << ", " << j << "]" << ", w = " << w << endl;                
+
+                k = i + 1;
+                while(A[k] <= A[i]) ++k;
+                i = k;
+            }else if(A[i] > A[j]){
+                int k = j - 1;
+                while(k > i){
+                    w += ((A[k] - A[j]) < 0) ? (A[j] - A[k]) : 0;
+                    A[k] = ((A[k] - A[j]) < 0) ? A[j] : A[k];
+                    --k;
+                }
+
+                cout << "[ " << i << ", " << j << "]" << ", w = " << w << endl;                
+                k = j - 1;
+                while(A[k] <= A[j]) --k;
+                j = k;
+            }
+        }
+
+        return w;
+    }
+
 	int trap(int A[], int n) {
 		map<int, int> mapMarkToPos;
 
@@ -85,10 +121,10 @@ int main(int argc, char** argv){
 
 	Solution s;
 	double start = currentTimingMs();
-	int r = s.trap(A, n);
+	int r = s.trap0(A, n);
 	cout << "My solution is " << r << ". Cost " << currentTimingMs() - start << " MS." << endl;
 
-	int v = s.trap1(A, n);
+	int v = s.trap(A, n);
 	cout << "Ref solution is " << v << endl;
 	return 0;
 }

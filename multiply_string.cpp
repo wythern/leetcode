@@ -3,34 +3,32 @@
 class Solution {
 public:
     string multiply(string num1, string num2) {
-        int num1_dot = 0;
-        int num2_dot = 0;
-        string pureNum1 = preProcessString(num1, &num1_dot);
-        string pureNum2 = preProcessString(num2, &num2_dot);
+        int num1dot_tail = 0;
+        int num2dot_tail = 0;
+        string pureNum1 = preProcessString(num1, &num1dot_tail);
+        string pureNum2 = preProcessString(num2, &num2dot_tail);
 
         string r = multiplyImpl(pureNum1, pureNum2);
-        int dotPos = 0;
-        if(num1_dot || num2_dot){
-            dotPos = std::distance(r.rbegin() + num1_dot + num2_dot, r.rend());
-            r.insert(dotPos, 1, '.');
-        }
+        int dotPos = std::distance(r.rbegin() + num1dot_tail + num2dot_tail, r.rend());
+        r.insert(dotPos, 1, '.'); // add decimal dot back.
+        cout << r << endl;
 
-        int front = r.find_first_not_of('0');
-        int end = r.size();
-        if(dotPos != 0){
-            front = std::min<int>(front, dotPos - 1);
-            end = std::max<int>(r.find_last_not_of('0'), dotPos - 1);
-        }
+        int front = std::min<int>(r.find_first_not_of('0'), dotPos);
+        int end = std::max<int>(r.find_last_not_of('0'), dotPos);
+        if (front == dotPos)
+            front = dotPos - 1;
+        if (end != dotPos)
+            end++; 
 
         return string(r.begin() + front, r.begin() + end);
     }
 
-    string preProcessString(string& strNum, int* dotPos){
+    string preProcessString(string& strNum, int* dotTail){
         int pos = strNum.find('.');
-        dotPos = 0;
+        *dotTail = 0;
         if(pos != string::npos){
-            *dotPos = strNum.size() - pos;
-            strNum.erase(pos);
+            *dotTail = strNum.size() - pos - 1;
+            strNum.erase(pos, 1);
         }
         return strNum;
     }

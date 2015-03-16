@@ -17,6 +17,7 @@
 //C++
 #include <climits>
 #include <vector>
+#include <list>
 #include <set>
 #include <stack>
 #include <map>

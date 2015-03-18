@@ -2,23 +2,7 @@
 
 class Solution {
 public:
-    vector<string> anagrams(vector<string> &strs) {
-		map<string, string> mapAnagrams;
-		set<string> vAnagrams;
-		for(vector<string>::iterator it = strs.begin();
-			it != strs.end();
-			++it){
-			string strCandidate(*it);
-			std::sort(strCandidate.begin(), strCandidate.end());
-			map<string, string>::iterator itMap = mapAnagrams.find(strCandidate);
-			if(itMap != mapAnagrams.end()){
-				vAnagrams.push_back(itMap->second);
-				vAnagrams.push_back(*it);
-			}
-		}
-		
-		return vAnagrams;
-    }
+
 };
 
 int main(int argc, char** argv){

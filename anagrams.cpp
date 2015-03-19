@@ -3,26 +3,26 @@
 class Solution {
 public:
     vector<string> anagrams(vector<string> &strs) {
-		map<string, int> mapAnagrams;
+		map<string, vector<string> > mapAnagrams;
 		vector<string> vAnagrams;
 		for(vector<string>::iterator it = strs.begin();
 			it != strs.end();
 			++it){
 			string strCandidate(*it);
 			std::sort(strCandidate.begin(), strCandidate.end());
-			map<string, int>::iterator itMap = mapAnagrams.find(strCandidate);
+			map<string, vector<string> >::iterator itMap = mapAnagrams.find(strCandidate);
 			if(itMap != mapAnagrams.end()){
-				++itMap->second;
+				itMap->second.push_back(*it);
 			}else{
-				mapAnagrams[strCandidate] = 1;
+				mapAnagrams[strCandidate] = vector<string>(1, *it);
 			}
 		}
 
-		for(map<string, int>::iterator itMap = mapAnagrams.begin();
+		for(map<string, vector<string> >::iterator itMap = mapAnagrams.begin();
 			itMap != mapAnagrams.end();
 			++itMap){
-			if(itMap->second > 1){
-				vAnagrams.insert(vAnagrams.end(), itMap->second, itMap->first);
+			if(itMap->second.size() > 1){
+				vAnagrams.insert(vAnagrams.end(), itMap->second.begin(), itMap->second.end());
 			}
 		}
 		

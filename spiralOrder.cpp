@@ -2,6 +2,35 @@
 
 class Solution {
 public:
+	vector<vector<int> > generateMatrix(int n) {
+		vector<vector<int> > matrix(n, vector<int>(n, 0));
+		generateMatrixImpl(matrix, n, 0, 0, 1);
+		return matrix;
+    }
+
+	void generateMatrixImpl(vector<vector<int> > &matrix, int n, int x, int y, int v){
+		if (n <= 0)
+			return;
+
+		for(int i = 0; i < n; ++i){
+			matrix[y][x + i] = v++;
+		}
+
+		for(int i = 1; i < n; ++i){
+			matrix[y + i][x + n - 1] = v++;
+		}
+
+		for(int i = n - 2; i >= 0; --i){
+			matrix[y + n - 1][x + i] = v++;
+		}
+
+		for(int i = n - 2; i >= 1; --i){
+			matrix[y + i][x] = v++;
+		}
+
+		generateMatrixImpl(matrix, n - 2, x + 1, y + 1, v);
+	}
+
 	vector<int> spiralOrder(vector<vector<int> > &matrix) {
 		if(matrix.empty())
 			return vector<int>();
@@ -48,7 +77,14 @@ int main(int argc, char** argv){
 		matrix.push_back(vector<int>(p[i], p[i] + sizeof(p[i])/sizeof(p[i][0])));
 	}
 	Solution s;
-	vector<int> vSpiralMatrix(s.spiralOrder(matrix));
-	printContainer<vector<int> >(vSpiralMatrix, vSpiralMatrix.size(), "S");
+	//vector<int> vSpiralMatrix(s.spiralOrder(matrix));
+	//printContainer<vector<int> >(vSpiralMatrix, vSpiralMatrix.size(), "S");
+	int n = 4;
+	vector<vector<int> > m = s.generateMatrix(n);
+
+	for(int i = 0; i < n; ++i){
+		printContainer<vector<int> > (m[i], m[i].size(), "m");
+	}
+	
 	return 0;
 }

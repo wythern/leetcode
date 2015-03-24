@@ -2,6 +2,11 @@
 
 class Solution {
 public:
+	int totalNQueens(int n) {
+		vector<vector<int> >  vInts = solveNQueensImpl(n);
+		return vInts.size();
+    }
+
     vector<vector<string> > solveNQueens(int n) {
 		vector<vector<int> >  vInts = solveNQueensImpl(n);
 		vector<vector<string> >  vSolution;
@@ -9,8 +14,9 @@ public:
 			vector<string> vStr;
 			string s(n, '.');
 			for(int j = 0; j < vInts[i].size(); ++j){
-				s[j] = 'Q';
+				s[vInts[i][j]] = 'Q';
 				vStr.push_back(s);
+				s[vInts[i][j]] = '.';
 			}
 			vSolution.push_back(vStr);
 		}
@@ -18,14 +24,15 @@ public:
     }
 
 	vector<vector<int> > solveNQueensImpl(int n){
-		int v[n]; // visited;
-		memset(v, sizeof(v), 0xFF);
+		//int *v = (int*)malloc(sizeof(int)*n); // visited;
+		int v[n];
+		memset(v, 0xFF, sizeof(int)*n);
 		int c[n]; // coloum;
-		memset(c, sizeof(c), 0x0);
+		memset(c, 0, sizeof(int)*n);
 		int d[2*n - 1]; // dig;
-		memset(d, sizeof(d), 0x0);
+		memset(d, 0, sizeof(int)*(2*n - 1));
 		int rd[2*n - 1];// reverse-dig;
-		memset(rd, sizeof(rd), 0x0);
+		memset(rd, 0, sizeof(int)*(2*n - 1));
 
 		vector<vector<int> > vS;
 		vector<int> s;
@@ -50,17 +57,22 @@ public:
 				}else{
 					int x = s.back();
 					s.pop_back();
+					v[y] = -1;
+					--y;
 					c[x] = 0;
 					d[x+y] = 0;
 					rd[n-1+x-y] = 0;
-					--y;
 				}
 			}else{
 				++y;
 				if(y == n){
 					vS.push_back(s);
-					s.clear();
-					y == 0;
+					int x = s.back();
+					s.pop_back();
+					y = n - 1;
+					c[x] = 0;
+					d[x+y] = 0;
+					rd[n-1+x-y] = 0;
 				}
 			}
 		}
@@ -71,9 +83,16 @@ public:
 
 int main(int argc, char** argv){
 	Solution s;
+	
 	int n = 1;
+	if(argc > 1){
+		n = atoi(argv[1]);
+	}
+
+	int c = s.totalNQueens(n);
+	cout << "Total " << c << " solutions." << endl;
 	vector<vector<string> > vResults(s.solveNQueens(n));
 	for(int i = 0; i < vResults.size(); ++i)
-		printContainer<vector<string> >(vResults[i], vResults[i].size(), "Result");
+		printContainer<vector<string> >(vResults[i], vResults[i].size(), "Result\n", true);
 	return 0;
 }

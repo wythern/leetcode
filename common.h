@@ -110,16 +110,19 @@ void printArray(T A[], int n, const char* pszArrayName = NULL)
 }
 
 template <class T>
-void printContainer(T A, int n, const char* pszArrayName = NULL)
+void printContainer(T A, int n, const char* pszArrayName = NULL, bool bCR = false)
 {
     if(NULL != pszArrayName){
-        printf("%s[", pszArrayName);
+        printf("%s[\n", pszArrayName);
     }else{
         printf("Array[");
     }
 
-    for(typename T::iterator i = A.begin(); i != A.end(); ++i)
+    for(typename T::iterator i = A.begin(); i != A.end(); ++i){
 		std::cout << *i << ",";
+		if(bCR)
+			cout << endl;
+	}
     printf("]\n");
 }
 

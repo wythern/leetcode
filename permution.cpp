@@ -1,7 +1,52 @@
 #include "common.h"
 
 class Solution {
+private:
+    int m_nCount;
+    string m_strKthPermutation;
 public:
+    string getPermutation(int n, int k) {
+        m_nCount = k;
+        vector<int> num;
+        for(int i = 0; i < n; ++i){
+            num.push_back(i + 1);
+        }
+
+        if(m_nCount > 0){
+            while(--m_nCount > 0){
+                nextPermutation(num);
+            }
+
+            for(int i = 0; i < num.size(); ++i){
+                m_strKthPermutation.push_back(num[i] + '0');
+            }
+        }
+
+        return m_strKthPermutation;
+    }
+
+    void nextPermutation(vector<int> &num) {
+        if (num.empty())
+            return;
+
+        vector<int>::reverse_iterator r = num.rbegin();
+        for(vector<int>::reverse_iterator rIt = num.rbegin() + 1;
+            rIt != num.rend();
+            ++rIt){
+            if( *rIt >= *r){
+                r = rIt;
+            }else{
+                vector<int>::iterator it = num.end() - distance(num.rbegin(), rIt) - 1;
+                sort(it + 1, num.end());
+                swap(*upper_bound(it + 1, num.end(), *it), *it);
+                return;
+            }
+        }
+
+        sort(num.begin(), num.end());
+        return;
+    }
+
     vector<vector<int> > permute(vector<int> &num) {
 		vector<vector<int> > vResults;
 		permuteImpl_Unique(num, num.begin(), num.end(), vResults);
@@ -61,7 +106,7 @@ public:
 };
 
 int main(int argc, char** argv){
-	int A[] = {1, 1, 2, 2};
+	int A[] = {1, 2, 3, 4};
 	vector<int> vA(A, A+4);
 	Solution s;
 	vector<vector<int> > vR(s.permuteUnique(vA));
@@ -70,5 +115,15 @@ int main(int argc, char** argv){
 		printContainer<vector<int> >(vR[i], vR[i].size(), "");
 	}
 	//*/
+
+    if(argc < 3){
+        exit(0);
+    }
+
+    int n = atoi(argv[1]);
+    int k = atoi(argv[2]);
+    string strKthNum = s.getPermutation(n, k);
+    cout << "Kth string = " << strKthNum << endl;
+    printf("ks = %s.\n", strKthNum.c_str());
 	return 0;
 }

@@ -113,7 +113,7 @@ template <class T>
 void printContainer(T A, int n, const char* pszArrayName = NULL, bool bCR = false)
 {
     if(NULL != pszArrayName){
-        printf("%s[\n", pszArrayName);
+        printf("%s[", pszArrayName);
     }else{
         printf("Array[");
     }

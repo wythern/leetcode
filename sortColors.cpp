@@ -8,15 +8,18 @@ public:
 
 		int k = select(A, n);
 		sortColorsQsort(A, k);
-		sortColorsQsort(A + k + 1, n - k);
+		sortColorsQsort(A + k + 1, n - k - 1);
 	}
 
 	int select(int A[], int n){
-		int k = n - 1;
+		if(n <= 0)
+			return 0;
+
 		int i = 1;
-		//std::swap(A[0], A[n]);
+		int lo = 0;
 		while(i < n){
 			if(A[i] < A[0]){
+				lo = i;
 				++i;
 			}else{
 				int j = i + 1;
@@ -25,7 +28,7 @@ public:
 
 				if(j < n){
 					std::swap(A[i], A[j]);
-					k = i;
+					lo = i;
 					++i;
 				}else{
 					i = n;
@@ -33,8 +36,8 @@ public:
 			}
 		}
 
-		std::swap(A[0], A[k]);
-		return k;
+		std::swap(A[0], A[lo]);
+		return lo;
 	}
 
     void sortColorsTwoPass(int A[], int n) {
@@ -57,7 +60,8 @@ public:
 int main(int argc, char** argv){
 
 	Solution s;
-	int array[] ={0,1,2,1,2,1,2,1,0,1,0,2,2,1,2,1,0,0,0};
+	//int array[] ={0,1,2,1,2,1,2,1,0,1,0,2,2,1,2,1,0,0,0};
+	int array[] ={2,0};
 	int n = sizeof(array)/sizeof(int);
 	printArray<int>(array, n, "array");
 	s.sortColorsQsort(array, n);

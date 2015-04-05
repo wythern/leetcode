@@ -25,6 +25,7 @@
 #include <sstream>
 #include <iostream>
 #include <string>
+#include <bitset>
 #include <exception>
 //#include <hash_map>
 
@@ -35,6 +36,7 @@ using std::string;
 using std::vector;
 using std::set;
 using std::map;
+using std::bitset;
 using std::pair;
 using std::cout;
 using std::endl;

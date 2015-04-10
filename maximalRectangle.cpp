@@ -1,29 +1,41 @@
 #include "common.h"
 
 class Solution {
+private:
+	vector<vector<int> > m_vDbCount;
 public:
     int maximalRectangle(vector<vector<char> > &matrix) {
 		if(matrix.empty())
 			return 0;
 
-		return maximalRectangleImpl(matrix, 0, matrix[0].size(), 0, matrix.size());
+		m_vDbCount = vector<vector<int> >(matrix.size(), vector<int>(matrix[0].size(), 0));
+		int rect =  maximalRectangleImpl(matrix, 0, matrix[0].size(), 0, matrix.size(), 0, 0);
+
+
+		for(int i = 0; i < m_vDbCount.size(); ++i){
+			vector<int>& v = m_vDbCount[i];
+			printContainer<vector<int> > (v, v.size(), "");
+		}
+
+		return rect;
     }
 
 	int maximalRectangleImpl(vector<vector<char> > &matrix,
-							 int l, int r, int t, int b) {
+							 int l, int r, int t, int b, int x, int y) {
 		if(l < 0 || t < 0 || r < 0 || b < 0 ||
 		   l > matrix[0].size() || t > matrix.size() ||
 		   r > matrix[0].size() || b > matrix.size() ||
 		   l >= r || t >= b)
 			return 0;
 
-		for(int j = t; j < b; ++j)
-			for(int i = l; i < r; ++i){
+		for(int j = y; j < b; ++j)
+			for(int i = x; i < r; ++i){
+				m_vDbCount[j][i]++;
 				if(matrix[j][i] == '0'){
 					return std::max(std::max((r - l)*(j - t),//maximalRectangleImpl(matrix, l, r, t, j), 
-											 maximalRectangleImpl(matrix, l, r, j + 1, b)),
-									std::max(maximalRectangleImpl(matrix, l, i, t, b), 
-											 maximalRectangleImpl(matrix, i + 1, r, t, b)));
+											 maximalRectangleImpl(matrix, l, r, j + 1, b, l, j + 1)),
+									std::max(maximalRectangleImpl(matrix, l, i, t, b, l, j + 1),
+											 maximalRectangleImpl(matrix, i + 1, r, t, b, i + 1, j)));
 				}
 			}
 
@@ -53,8 +65,8 @@ int main(int argc, char** argv){
 						   "1111110111111111011111111111110111110111",
 						   "1011111111111111010111110010111110111111",
 						   "1111110011111111111110111111111111111011",
-#if 0
 						   "1111111111111111110111011111011111011011",
+#if 0
 						   "1100011011111111111111011111011111111111",
 						   "1111101011111111111101100101110011111111",
 						   "1110010111111111111011011110111101111101",
@@ -88,10 +100,10 @@ int main(int argc, char** argv){
 		printContainer<vector<char> > (v, v.size(), "");
 	}
 #else
-	char array[][4] = {{ '0', '0', '1', '1'},
-					   { '1', '0', '1', '1'},
-					   { '0', '0', '1', '1'}};
-	//char array[][1] = {{'0'}};
+	char array1[][4] = {{ '0', '0', '1', '1'},
+					   { '1', '0', '1', '0'},
+					   { '0', '0', '0', '0'}};
+	char array[][2] = {{'1', '0'}};
 
 	vector<vector<char> > grid;
 	for(int i = 0; i < sizeof(array)/sizeof(array[0]); ++i){

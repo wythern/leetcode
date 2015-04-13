@@ -8,15 +8,6 @@
  *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
  * };
  */
-/**
- * Definition for binary tree
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
- * };
- */
 class Solution {
 public:
     bool isValidBST(TreeNode *root) {
@@ -51,8 +42,12 @@ private:
 };
 
 int main(int argc, char** argv){
+	int A[] = {1, #, 2, 3};
 	Solution s;
-	vector<int> A(s.grayCode1(2));
-	printContainer<vector<int> >(A, A.size(), "A");
+	TreeNode tree;
+	tree.from(A, 4);
+	tree.dump();
+	
+	//printContainer<vector<int> >(A, A.size(), "A");
 	return 0;
 }

@@ -41,6 +41,7 @@ using std::pair;
 using std::cout;
 using std::endl;
 using std::find;
+using std::list;
 using std::swap;
 
 struct ListNode {
@@ -94,6 +95,87 @@ public:
 		return ((plhs == NULL) && (prhs == NULL));
 	}
 
+};
+
+/**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class TreeNode {
+public:
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+	TreeNode(int A[], int n) : left(NULL)
+							 , right(NULL)
+							 , m_bInit(false)
+	{from(A, n);}
+
+    TreeNode(int x) : val(x), left(NULL), right(NULL), m_bInit(false) {}
+	~TreeNode() {
+		if(left){delete left; left = NULL;}
+		if(right){delete right; right = NULL;}
+	}
+
+public:
+	/* parse array like: [1, #, 2, 3].
+	 *       1
+	 *      / \
+	 *	  ()   2
+	 *        /
+	 *       3											\
+	 */
+	void from(int A[], int n){
+		if(A == NULL || 0 == n)
+			return;
+
+		if(A[0] == '#')
+			return;
+
+		m_bInit = true;
+		val = A[0];
+		list<TreeNode*> listNode;
+		listNode.push_front(this);
+		int i = 0;
+		while(i < n && !listNode.empty()){
+			TreeNode* p = listNode.front();
+			listNode.pop_front();
+			if(i + 1 < n && A[i+1] != '#') {
+				p->left = new TreeNode(A[i+1]);
+				listNode.push_back(p->left);
+			}
+			if(i + 2 < n && A[i+2] != '#') {
+				p->right = new TreeNode(A[i+2]);
+				listNode.push_back(p->right);
+			}
+			i += 2;
+		}
+	}
+
+	void dump(){
+		list<TreeNode*> v(1, this);
+		cout << '[';
+		while(!v.empty()){
+			TreeNode* p = v.front();
+			v.pop_front();
+			if(p){
+				cout << p->val << ",";
+				if(p->left) v.push_back(p->left);
+				if(p->right) v.push_back(p->right);
+			}
+		}
+		cout << ']' << endl;
+	}
+
+	bool isValid(){return m_bInit;}
+
+private:
+	bool m_bInit;
 };
 
 template <class T>

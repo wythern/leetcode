@@ -10,7 +10,6 @@ public:
     
     bool BalancedHeight(TreeNode* root, int& h){
         if(!root){
-            h = 0;
             return true;
         }
         

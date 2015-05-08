@@ -158,6 +158,7 @@ public:
 	}
 
 	void dump(){
+#if 0
 		list<TreeNode*> v(1, this);
 		cout << '[';
 		while(!v.empty()){
@@ -170,7 +171,18 @@ public:
 			}
 		}
 		cout << ']' << endl;
+#endif
+		cout << '[';
+        dump(this);        
+		cout << ']' << endl;
 	}
+
+    void dump(TreeNode* root){
+        if(!root) return;
+        dump(root->left);
+        cout << root->val << ",";
+        dump(root->right);
+    }
 
 	bool isValid(){return m_bInit;}
 

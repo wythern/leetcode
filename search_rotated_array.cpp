@@ -4,51 +4,51 @@ class Solution {
 public:
 #define TARGET_IN_RANGE(a, b, t) ((a <= t) && (t <= b))
 #define TARGET_IN_ROTATED_RANGE(a, b, t) ((a <= t) || (t <= b))
-#define PIVOT_IN_RANGE(a, b, t) (a > b)
+#define PIVOT_IN_RANGE(a, b, t) (a >= b)
 
-    int search(int A[], int n, int target) {
-		if(NULL == A || 0 == n){
+	bool search(vector<int>& nums, int target) {
+		return searchImpl(nums, target) != -1;
+	}
+
+	int searchImpl(vector<int>& A, int target) {
+		int n = A.size();
+		if(A.empty()){
 			return -1;
 		}
 
         if(PIVOT_IN_RANGE(A[0], A[n-1], target)){
-			search_rotated_array(A, 0, n, target);
+			return search_rotated_array(A, 0, n, target);
 		}else{
-			binary_search_array(A, 0, n, target);			
+			return binary_search_array(A, 0, n, target);			
 		}
     }
 
-	int search_rotated_array(int A[], int b, int e, int target) {
+	int search_rotated_array(vector<int>& A, int b, int e, int target) {
 		if(b >= e - 1){
 			return (A[b] == target) ? b : -1;
 		}
 
 		int m = b + (e - b)/2;
 		if(A[m] != target){
-			if (m > b && PIVOT_IN_RANGE(A[b], A[m - 1], target)) {
-				if (TARGET_IN_ROTATED_RANGE(A[b], A[m - 1], target))
-					return search_rotated_array(A, b, m, target);
-				else if(TARGET_IN_RANGE(A[m + 1], A[e - 1], target))
-					return binary_search_array(A, m + 1, e, target);
-			} else if(m + 1 < e && PIVOT_IN_RANGE(A[m + 1], A[e - 1], target)){
-				if (TARGET_IN_ROTATED_RANGE(A[m + 1], A[e - 1], target))
-					return search_rotated_array(A, m + 1, e, target);
-				if (TARGET_IN_RANGE(A[b], A[m - 1], target))
-					return binary_search_array(A, b, m, target);
-			} else { // m is the pivot
-				if (m > b && TARGET_IN_RANGE(A[b], A[m - 1], target))
-					return binary_search_array(A, b, m, target);
-				if (m + 1 < e && TARGET_IN_RANGE(A[m + 1], A[e - 1], target))
-					return binary_search_array(A, m + 1, e, target);
-			}
+			int idx = -1;
+			if (m > b && PIVOT_IN_RANGE(A[b], A[m - 1], target))
+				idx = search_rotated_array(A, b, m, target);
+			else if (m > b && TARGET_IN_RANGE(A[b], A[m - 1], target))
+				idx = binary_search_array(A, b, m, target);
 
-			// all not found;
-			return -1;
+			if (idx != -1)
+				return idx;
+
+			if (m + 1 < e && PIVOT_IN_RANGE(A[m + 1], A[e - 1], target))
+				idx = search_rotated_array(A, m + 1, e, target);
+			else if (m + 1 < e && TARGET_IN_RANGE(A[m + 1], A[e - 1], target))
+				idx = binary_search_array(A, m + 1, e, target);
+			return idx;
 		}else
 			return m;
 	}
 
-	int binary_search_array(int A[], int b, int e, int target){
+	int binary_search_array(vector<int>& A, int b, int e, int target){
 		if(b >= e - 1){
 			return (A[b] == target) ? b : -1;
 		}
@@ -64,9 +64,6 @@ public:
 };
 
 int main(int argc, char** argv){
-	if(argc < 3){
-		return -1;
-	}
 
 	Solution s;
 #if 0
@@ -92,11 +89,12 @@ int main(int argc, char** argv){
 
 	int target = atoi(argv[2]);
 #else
-	int A[] = {4, 5, 6, 7, 1, 2, 3};
-	int n = 7;
-	int target = atoi(argv[2]);
+	int A[] = {3, 1};
+	int n = sizeof(A)/sizeof(int);
+	int target = 3;
 	printArray<int>(A, n, "A");
 #endif
-	cout << s.search(A, n, target) << endl;
+	vector<int> nums(A, A + n);
+	cout << (s.search(nums, target) ? "OK" : "NOT OK") << endl;
 	return 0;
 }

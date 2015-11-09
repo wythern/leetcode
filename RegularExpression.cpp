@@ -97,6 +97,7 @@ private:
 		}
 
 		dumpCompiledPattern(&nodeGraph);
+		return true;
 	}
 
 	void dumpCompiledPattern(Node* pNode){
@@ -124,6 +125,8 @@ private:
 int main(int argc, char** argv)
 {
 	Solution s;
-	std::cout << argv[1] << (s.isMatch(argv[1], argv[2])? " " : " DOES NOT " ) << "Match " << argv[2] << std::endl;
+	char pszString[] = "aaaaaaaaaa";
+	char pszRegex[] = "a*";
+	std::cout << pszRegex << (s.isMatch(pszString, pszRegex)? " " : " DOES NOT " ) << "Match " << pszString << std::endl;
 	return 0;
 }

@@ -86,18 +86,89 @@ public:
 		return v;
 	}
 
+	vector<int> preorderTraversal(TreeNode* root) {
+		if (!root)
+			return vector<int>();
+
+		vector<int> preOrderNodes;
+		std::stack<TreeNode*> nodeStack;
+		nodeStack.push(root);
+		while (!nodeStack.empty()){
+			TreeNode* pNode = nodeStack.top();
+			nodeStack.pop();
+			preOrderNodes.push_back(pNode->val);
+			if(pNode->right) nodeStack.push(pNode->right);
+			if(pNode->left) nodeStack.push(pNode->left);
+		}
+
+		return preOrderNodes;
+	}
+
+	vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+		if (NULL == root)
+			return vector<vector<int>>();
+
+		bool bforward = false;
+		list<TreeNode*> stackUpNode(1, root);
+		list<TreeNode*> stackLoNode;
+
+		vector<vector<int>> outputOrder(1, vector<int>(1, root->val));
+		vector<int> vLvNums;
+		while (!stackUpNode.empty()){
+			TreeNode* pNode = NULL;
+			pNode = stackUpNode.front();
+			stackUpNode.pop_front();
+			if (pNode->left) stackLoNode.push_back(pNode->left);
+			if (pNode->right) stackLoNode.push_back(pNode->right);
+
+			if (stackUpNode.empty()){
+				if (bforward){
+					list<TreeNode*>::const_iterator rIt = stackLoNode.begin();
+					while (rIt != stackLoNode.end()){
+						vLvNums.push_back((*rIt)->val);
+						++rIt;
+					}
+				}
+				else{
+					list<TreeNode*>::reverse_iterator rIt = stackLoNode.rbegin();
+					while (rIt != stackLoNode.rend()){
+						vLvNums.push_back((*rIt)->val);
+						++rIt;
+					}
+				}
+
+				if(!vLvNums.empty()) outputOrder.push_back(vLvNums);
+				bforward = !bforward;
+				std::swap(stackUpNode, stackLoNode);
+				vLvNums.clear();
+			}
+		}
+
+		return outputOrder;
+	}
+
 private:
     bool m_bInit;
     int m_prev;
 };
 
 int main(int argc, char** argv){
-	int A[] = {1};
+	int A[] = { 3 };
+	//int A[] = { 3, 9, 20, '#', 22, 15, 7 };
 	//int A[] = {1, 2, 5, 3, '#', '#', '#', 4, '#', 5, '#', 6};
 	//int A[] = {1, 2, 3, 4, 5, 6, 7};
 	Solution s;
 	TreeNode tree(A, sizeof(A)/sizeof(int));
 	tree.dump();
-	vector<int> v(s.inorderTraversal(&tree));
+	vector<int> v1(s.inorderTraversal(&tree));
+	vector<int> v2(s.preorderTraversal(&tree));
+	//printContainer<vector<int>>(v2, v2.size());
+
+	pfcout << "----------------------------------------";
+	vector<vector<int>> v3 = s.zigzagLevelOrder(&tree);
+	for (size_t i = 0; i < v3.size(); i++)
+	{
+		printContainer<vector<int>>(v3[i], v3[i].size());
+	}
 	return 0;
 }

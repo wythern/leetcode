@@ -7,6 +7,7 @@
 
 #include "common.h"
 
+#if 0
 class Solution {
 public:
 	//brute-force
@@ -77,7 +78,7 @@ public:
 		int n = num.size();
 		set<vector<int> > vResult;
 
-		hash_map<int, std::set<std::pair<int, int> > > vVisited;
+		unordered_map<int, std::set<std::pair<int, int> > > vVisited;
         for(int i = 0; i < n; ++i){
 			for(int j = i + 1; j < n; ++j){
 				vVisited[num[i]+num[j]].insert(std::pair<int, int>(i, j));
@@ -216,7 +217,7 @@ public:
 		set<vector<int> > vResult;
 
 		set<int> setVisitNum;
-		hash_map<int, set<pair<int, int> > > setCandidate;
+		unordered_map<int, set<pair<int, int> > > setCandidate;
 
 		int c1 = 0;
 		double t1 = 0.0f;
@@ -359,16 +360,127 @@ public:
 		std::vector<std::vector<int> > v(vResult.begin(), vResult.end());
 		return v;
 	}
+};
+#endif
 
+class Solution {
+public:
+	int threeSumClosest(vector<int>& nums, int target) {
+		sort(nums.begin(), nums.end());
+		int start = 0;
+		int end = nums.size() - 1;
+		int curIdx = 0;
+		int minDiff = INT_MAX;
+		int closet = INT_MAX;
+		while (curIdx < (int)nums.size()){
+			int num = nums[curIdx];
+			start = curIdx + 1;
+			end = nums.size() - 1;
+			while (start < end){
+				int sum = num + nums[start] + nums[end];
+				if (sum > target) --end;
+				if (sum < target) ++start;
+				if (sum == target)
+					return sum;
+
+				int diff = abs(target - sum);
+				if (diff < minDiff){
+					minDiff = diff;
+					closet = sum;
+				}
+			}
+			++curIdx;
+		}
+		return closet;
+	}
+
+	vector<vector<int>> threeSum(vector<int>& nums, int target = 0) {
+		sort(nums.begin(), nums.end());
+		vector<vector<int>> vSumSet;
+		int start = 0;
+		int end = nums.size() - 1;
+		int curIdx = 0;
+		int minDiff = INT_MAX;
+		int closet = INT_MAX;
+		while (curIdx < (int)nums.size()){
+			int num = nums[curIdx];
+			start = curIdx + 1;
+			end = nums.size() - 1;
+			while (start < end){
+				vector<int> vIdx;
+				int sum = num + nums[start] + nums[end];
+				if (sum > target){
+					--end; 
+					continue;
+				}
+				if (sum < target){
+					++start;
+					continue;
+				}
+				if (sum == target){
+					vIdx.push_back(nums[curIdx]);
+					vIdx.push_back(nums[start]);
+					vIdx.push_back(nums[end]);
+					vSumSet.push_back(vIdx);
+				}
+				while (end > 0 && nums[end - 1] == nums[end]) end--;
+				while (start < end && nums[start + 1] == nums[start]) start++;
+				++start;
+			}
+			while (curIdx < (int)nums.size() - 1 && nums[curIdx + 1] == nums[curIdx]) curIdx++;
+			++curIdx;
+		}
+		return vSumSet;
+	}
+
+	vector<vector<int>> fourSum(vector<int>& nums, int target) {
+		vector<vector<int>> v4Sums;
+		int i = 0;
+		while (i < (int)nums.size() - 4)
+		{
+			vector<vector<int>> v3Sums;
+			vector<int> numsFor3Sum(nums.begin() + i + 1, nums.end());
+			v3Sums = threeSum(numsFor3Sum, target - nums[i]);
+			if (!v3Sums.empty()){
+				for (int j = 0; j < (int)v3Sums.size(); ++j){
+					vector<int> vSums(1, nums[i]);
+					vSums.insert(vSums.end(), v3Sums[j].begin(), v3Sums[j].end());
+					v4Sums.push_back(vSums);
+				}
+			}
+			while (i < (int)nums.size() - 1 && nums[i + 1] == nums[i]) ++i;
+			++i;
+		}
+
+		return v4Sums;
+	}
 };
 
 
 int main(int argc, char** argv)
 {
     Solution s;
+#if 0
     int A[] = {-6,-8,-9,4,-14,6,-10,7,12,13,4,9,7,14,-12,7,0,14,-1,-3,2,2,-3,11,-6,-10,-13,-13,1,-9,2,2,-2,8,-9,0,-9,-12,14,10,8,3,4,0,-6,7,14,9,6,-2,13,-15,8,-5,3,-13,-8,5,-11,0,11,6,-13,-14,-9,-15,-7,-11,10,-7,14,4,3,3,11,13,-13,11,-1,0,-6,-10,0,9,0,10,11,0,0,-14,-15,-12,-1,10,12,-2,2,-10,2,-2,-10,2,-13,1,12,5,-1,-15,1,5,-8,3,10,8};//{-1, 0, 1, 2, -1, -4};
 	int B[] = {-7,-11,12,-15,14,4,4,11,-11,2,-8,5,8,14,0,3,2,3,-3,-15,-2,3,6,1,2,8,-5,-7,3,1,8,11,-3,6,3,-4,-13,-15,14,-8,2,-8,4,-13,13,11,5,0,0,9,-8,5,-2,14,-9,-15,-1,-6,-15,9,10,9,-2,-8,-8,-14,-5,-14,-14,-6,-15,-5,-7,5,-11,14,-7,2,-9,0,-4,-1,-9,9,-10,-11,1,-4,-2,2,-9,-15,-12,-4,-8,-5,-11,-6,-4,-9,-4,-3,-7,4,9,-2,-5,-13,7,2,-5,-12,-14,1,13,-9,-3,-9,2,3,8,0,3};
-    vector<int> vInput(B, B + sizeof(B)/sizeof(int));
+	vector<int> vInput(B, B + sizeof(B) / sizeof(int));
+#else
+	//int A[] = { -1, 0, 1, 2, -1, -4, };
+	int A[] = { -6, -8, -9, 4, -14, 6, -10, 7, 12, 13, 4, 9, 7, 14, -12, 7, 0, 14, -1, -3, 2, 2, -3, 11, -6, -10, -13, -13, 1, -9, 2, 2, -2, 8, -9, 0, -9, -12, 14, 10, 8, 3, 4, 0, -6, 7, 14, 9, 6, -2, 13, -15, 8, -5, 3, -13, -8, 5, -11, 0, 11, 6, -13, -14, -9, -15, -7, -11, 10, -7, 14, 4, 3, 3, 11, 13, -13, 11, -1, 0, -6, -10, 0, 9, 0, 10, 11, 0, 0, -14, -15, -12, -1, 10, 12, -2, 2, -10, 2, -2, -10, 2, -13, 1, 12, 5, -1, -15, 1, 5, -8, 3, 10, 8 };//{-1, 0, 1, 2, -1, -4};
+	//int A[] = { 0, 0, 0, 0 };
+	int target = 0;
+	vector<int> vA(A, A + sizeof(A) / sizeof(int));
+	int closet = s.threeSumClosest(vA, target);
+	cout << "CLOSET =" << closet << endl;
+	vector<vector<int>> allCombination = s.fourSum(vA, target);
+
+	for (size_t i = 0; i < allCombination.size(); i++)
+	{
+		printContainer<vector<int>>(allCombination[i], allCombination[i].size(), "");
+	}
+
+	return 0;
+#endif
 
 #if 0
 	std::vector<int> vTest = generateRandomIntVector(3000, -3000, 3000);
@@ -382,7 +494,7 @@ int main(int argc, char** argv)
         std::cout << std::endl;
     }
 	//*/
-#else
+//#else
 	vector<vector<vector<int> > > vTestResults;
 
 	std::vector<int> vTest = generateRandomIntVector(800, -100, 100);

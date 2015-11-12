@@ -229,6 +229,26 @@ public:
 
 	bool isValid(){return m_bInit;}
 
+	TreeNode* find(int n){
+		return findImpl(this, n);
+	}
+
+	TreeNode* findImpl(TreeNode* root, int n){
+		if (root->val == n)
+			return root;
+
+		TreeNode* pNode = NULL;
+		if (root->left){
+			pNode = findImpl(root->left, n);
+		}
+
+		if (pNode == NULL && root->right){
+			pNode = findImpl(root->right, n);
+		}
+
+		return pNode;
+	}
+
 private:
 	bool m_bInit;
 };

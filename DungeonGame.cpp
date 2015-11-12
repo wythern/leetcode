@@ -3,6 +3,28 @@
 class Solution {
 public:
 	int calculateMinimumHP(vector<vector<int>>& dungeon) {
+		if (dungeon.empty() || dungeon[0].empty())
+			return 0;
+
+		// could be use 1-line.
+		vector<vector<int>> travelHP(dungeon);
+		int M = dungeon.size();
+		int N = dungeon[0].size();
+		travelHP[M - 1][N - 1] = dungeon[M - 1][N - 1] > 0 ? 1 : 1 - dungeon[M - 1][N - 1];
+		for (int i = N - 2; i >= 0; --i){
+			travelHP[M - 1][i] = travelHP[M - 1][i + 1] - dungeon[M - 1][i] > 0 ? travelHP[M - 1][i + 1] - dungeon[M - 1][i] : 1;
+		}
+
+		for (int i = M - 2; i >= 0; --i)
+		{
+			travelHP[i][N - 1] = travelHP[i + 1][N - 1] - dungeon[i][N - 1] > 0 ? travelHP[i + 1][N - 1] - dungeon[i][N - 1] : 1;
+			for (int j = N - 2; j >= 0; --j){
+				travelHP[i][j] = std::min(travelHP[i + 1][j] - dungeon[i][j] > 0 ? travelHP[i + 1][j] - dungeon[i][j] : 1,
+					travelHP[i][j + 1] - dungeon[i][j] > 0 ? travelHP[i][j + 1] - dungeon[i][j] : 1);
+			}
+		}
+
+		return travelHP[0][0];
 	}
 	
 	int calculateMinimumHP_WRONG(vector<vector<int>>& dungeon) {
@@ -45,16 +67,14 @@ public:
 };
 
 int main(int argc, char** argv){
-	int A[][3] = {
-#if 0
-		{ -2, -3, 3 },
-		{ -5, -10, 1 },
-		{ 10, 30, -5 },
-#endif
-		{ 3, -20, 30 },
-		{ -3, 4, 0 },
+	int A[] = {
+//		   1,  -2,  3,
+		   //2,  -2, -2,
+		   -2, -3, 3,
+		   -5, -10, 1,
+		   10, 30, -5,
 	};
-	vector<vector<int>> dungeon = Init2DTable(&A[0][0], sizeof(A) / sizeof(A[0]), sizeof(A[0]) / sizeof(int));
+	vector<vector<int>> dungeon = Init2DTable(A, 3, 3);
 	Solution s;
 	cout << s.calculateMinimumHP(dungeon) << endl;
 	return 0;

@@ -61,10 +61,13 @@
 #include "ScrambleString.inl" // DO you have brain?? why can't you solve this??? WHYYYYYYY???
 #include "SlidingWindow.inl" // pasting method, learn a index operation from web.
 #include "Search2DMatrix.inl"
+#include "TheSkylineProblem.inl"
+#include "NumberofDigitOne.inl" // learn from others.
+#include "lowestCommonAncestor.inl"
+#include "DungeonGame.cpp" // NOT AC!!!
 #endif
 
 #if __RUNNING_ZONE__
-//#include "DungeonGame.cpp" // NOT AC!!!
 //#include "sqrtInt.cpp" // NOT AC! precis issue.
 //#include "SampleCode.cpp" // All sample code.
 //#include "minWindow.inl" // NOT AC, your level is too low!!!!!
@@ -72,9 +75,9 @@
 //#include "sum3.cpp" // 4Sum NOT AC!
 //#include "SingleNumber.cpp" //NOT AC, findDuplicate();
 //#include "traversal_binary_tree.cpp"
+//#include "ShortestPalindrome.inl"
 //#include "DistinctSubsequences.inl" // NOT AC
-//#include "NumberofDigitOne.inl" // learn from others.
-#include "TheSkylineProblem.inl"
+
 #endif
 
 #ifdef CODE_BEGINS_HERE

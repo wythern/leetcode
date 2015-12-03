@@ -2,10 +2,6 @@
 #define __AC_ZONE__ 0
 #define __NOT_AC_ZONE__ 0
 
-#if __NOT_AC_ZONE__
-#include "Palindrome_Partitioning.cpp" // NOT AC
-#endif
-
 #if __AC_ZONE__
 #include "Sum Root to Leaf Numbers.cpp"
 #include "Surrounded_Regions.cpp" // AC
@@ -64,20 +60,34 @@
 #include "TheSkylineProblem.inl"
 #include "NumberofDigitOne.inl" // learn from others.
 #include "lowestCommonAncestor.inl"
-#include "DungeonGame.cpp" // NOT AC!!!
+#include "DungeonGame.cpp" // 
+#include "nthUglyNumber.inl"
+#include "MajorityElement.inl"
+#include "minWindow.inl" //your level is too low!!!!!
+#include "Palindrome_Partitioning.cpp" // Leveage all conditions!!! ALL!!!
+#include "house_robber.cpp"
+#include "MaximalSquare.inl"
+#include "maximum_gap.inl"
+#include "FindMedianfromDataStream.inl"
+#include "maxPointsOnALine.cpp"
+#include "AdditiveNumber.inl"
+#include "ExpressionAddOperation.inl"
+#include "RangeSum2D.inl"
+#include "ContainDuplicates.inl"
+#include "minheighttree.inl"
+#include "BurstBalloons.inl"
 #endif
 
 #if __RUNNING_ZONE__
 //#include "sqrtInt.cpp" // NOT AC! precis issue.
 //#include "SampleCode.cpp" // All sample code.
-//#include "minWindow.inl" // NOT AC, your level is too low!!!!!
 //#include "RegularExpression.cpp" // NOT AC
 //#include "sum3.cpp" // 4Sum NOT AC!
 //#include "SingleNumber.cpp" //NOT AC, findDuplicate();
 //#include "traversal_binary_tree.cpp"
 //#include "ShortestPalindrome.inl"
 //#include "DistinctSubsequences.inl" // NOT AC
-
+#include "nthUglyNumber.inl"
 #endif
 
 #ifdef CODE_BEGINS_HERE

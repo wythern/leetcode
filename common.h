@@ -30,6 +30,7 @@
 #include <unordered_set>
 #include <unordered_map>
 #include <algorithm>
+#include <functional>
 #include <sstream>
 #include <iostream>
 #include <ostream>
@@ -545,6 +546,27 @@ struct UndirectedGraphNode {
 
 };
 
+struct Point {
+	int x;
+	int y;
+	Point() : x(0), y(0) {}
+	Point(int a, int b) : x(a), y(b) {}
+
+	static vector<Point> InitPointArray(int A[], int N){
+		vector<Point> vPoints;
+		for (size_t i = 0; i < N; i += 2)
+		{
+			vPoints.push_back(Point(A[i], A[i + 1]));
+		}
+
+		return vPoints;
+	}
+
+	void printCoords(){
+		cout << "pt (" << x << ", " << y << ")" << endl;
+	}
+};
+
 template <class T>
 static void printArray(T A[], int n, const char* pszArrayName = NULL)
 {
@@ -558,6 +580,15 @@ static void printArray(T A[], int n, const char* pszArrayName = NULL)
     for(int i = 0; i < n; ++i)
 		std::cout << A[i] << ",";
     printf("]\n");
+}
+
+static unsigned mathGCD(unsigned u, unsigned v) {
+	while (v != 0) {
+		unsigned r = u % v;
+		u = v;
+		v = r;
+	}
+	return u;
 }
 
 template <class T>
@@ -638,6 +669,15 @@ static vector<vector<T> > Init2DTable(T A[], int r, int c){
 		table.push_back(v);
 	}
 	return table;
+}
+
+static vector<int> rangeVector(int start, int end){
+	vector<int> vRange(end - start + 1, 0);
+	for (size_t i = 0; i < end - start + 1; i++)
+	{
+		vRange[i] = start + i;
+	}
+	return vRange;
 }
 
 static double gGlobalTimeStamp;
